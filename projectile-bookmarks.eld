@@ -1,0 +1,1 @@
+("~/Dropbox/Research/ANL/irpc/" "~/xv6-public/" "~/.emacs.d/")

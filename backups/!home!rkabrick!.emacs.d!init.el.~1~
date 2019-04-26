@@ -1,0 +1,17 @@
+(setq my-user-emacs-directory "~/.emacs.d/")
+
+(load (expand-file-name "~/.emacs.d/init-brickmacs.el")) 
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (drag-stuff use-package irony company which-key ace-window multiple-cursors web-mode smartparens flycheck linum-relative yasnippet evil-leader evil counsel-projectile projectile git-timemachine git-link magit crux smex flx counsel swiper ivy dashboard doom-modeline doom-themes all-the-icons))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )

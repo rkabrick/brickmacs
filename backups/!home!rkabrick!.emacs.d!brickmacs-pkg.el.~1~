@@ -1,0 +1,77 @@
+;; === SETUP ===
+(require 'package)
+(require 'tls)
+(setq package-enable-at-startup nil)
+(setq package-archives '())
+(package-initialize)
+(add-to-list 'package-archives
+             '("melpa" . "http://melpa.milkbox.net/packages/") t)
+(add-to-list 'package-archives
+             '("gnu" . "http://elpa.gnu.org/packages/"))  
+(add-to-list 'package-archives
+             '("marmalade" . "https://marmalade-repo.org/packages/"))
+(add-to-list 'package-archives
+             '("org" . "http://orgmode.org/elpa/") t)
+(add-to-list 'package-archives
+             '("tromey" . "http://tromey.com/elpa/") t)
+
+;; === CUSTOM CHECK FUNCTION ===
+(defun ensure-package-installed (&rest packages)
+  "Assure every package is installed, ask for installation if it’s not.
+   Return a list of installed packages or nil for every skipped package."
+  (mapcar
+   (lambda (package)
+     (unless (package-installed-p package)
+       (package-install package)))
+     packages)
+)
+
+;; === List my packages ===
+;; simply add package names to the list
+(ensure-package-installed
+    ;; Appearance
+    'all-the-icons
+    'doom-themes
+    'doom-modeline
+    'dashboard
+
+    ;; Navigation
+    'ivy
+    'swiper
+    'counsel
+    'flx
+    'smex
+    'crux
+    'ido
+    
+    ;; Projects
+    'magit
+    'git-link
+    'git-timemachine
+    'projectile
+    'counsel-projectile
+
+    ;; Code Editing
+    'evil
+    'evil-leader
+    'yasnippet
+    'linum-relative
+    'flycheck
+    'smartparens
+    'web-mode
+    'multiple-cursors
+    
+    ;; Buffer Management
+    'ace-window
+    
+    ;; Completion
+    'which-key
+    'company
+    'irony
+
+    ;; Utilities
+    'use-package
+    'drag-stuff
+
+    )
+(provide 'brickmacs-pkg)

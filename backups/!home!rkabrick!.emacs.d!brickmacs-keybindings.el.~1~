@@ -1,0 +1,33 @@
+;;; ======= EVIL MODE ======= ;;;
+(use-package evil
+  :ensure t
+  :init (evil-mode 't)
+  :config
+  (define-key evil-motion-state-map (kbd "M-h") 'evil-window-left)
+  (define-key evil-motion-state-map (kbd "M-j") 'evil-window-down)
+  (define-key evil-motion-state-map (kbd "M-k") 'evil-window-up)
+  (define-key evil-motion-state-map (kbd "M-l") 'evil-window-right)
+  (define-key evil-motion-state-map (kbd "M-n") 'evil-window-new)
+  (define-key evil-motion-state-map (kbd "M-2") 'split-window-horizontally)
+  (define-key evil-motion-state-map (kbd "M-3") 'split-window-vertically)
+
+  (evil-define-key 'visual evil-surround-mode-map "s" 'evil-surround-region)
+  (define-key evil-motion-state-map "gt" 'evil-jump-to-tag)
+  (define-key evil-motion-state-map "gk" 'evil-ace-jump-word-mode)
+  )
+
+(use-package evil-leader-mode
+  :ensure t
+  :init (global-leader-mode)
+  :config
+  (evil-leader/set-leader "<SPC>")
+  (evil-leader/set-key
+    "s" 'ido-goto-symbol
+    "f" 'ido-find-file
+    "b" 'ido-switch-buffer
+    "w" 'evil-write
+    "g" 'find-file-in-project-dir
+    "," 'evilnc-comment-or-uncomment-lines
+    "cl" 'evilnc-comment-or-uncomment-to-the-line
+    "cp" 'evilnc-comment-or-uncomment-paragraphs)
+  )

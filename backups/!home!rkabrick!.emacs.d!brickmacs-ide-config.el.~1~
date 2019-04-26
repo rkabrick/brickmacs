@@ -1,0 +1,20 @@
+;;; ========= Brickmacs IDE ========= ;;;
+
+;; This file holds all of the general ;;
+;; used by Brickmacs to provide an
+;; IDE like experience
+
+;;; CODE
+
+;; Company (Completion)
+(use-package company
+  :init
+  (global-company-mode)
+
+  :config
+  (setq company-idle-delay 0))
+
+;; Flycheck (on-the-fly syntax checking)
+(use-package flycheck
+  :init (global-flycheck-mode))
+
