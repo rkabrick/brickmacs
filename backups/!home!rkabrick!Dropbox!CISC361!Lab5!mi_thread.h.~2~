@@ -1,0 +1,25 @@
+/**
+ * @file
+ * @brief
+ * @author
+ * @date   Sat Apr 27 23:09:39 2019
+ *
+ **/
+
+
+/** Initialize thread library by setting up the "running" and the "ready"
+ * queues, creating TCB of the "main" thread, and inserting
+ * it into the running queue **/
+void t_init();
+
+/** Shut down the thread library by freeing all the dynamically allocated memory **/
+void t_shutdown();
+
+/** Create a thread with:
+ * priority = pri
+ * function = func
+ * thread id = thr_id
+ *
+ * The parent calling t_create() continues its execution upon returning from t_create();
+ **/
+int t_create(void (*func)(int), int thr_id, int pri);

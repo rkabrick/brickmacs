@@ -1,0 +1,13 @@
+#name: function-comment
+#key: fc
+# --
+/**
+ * @brief: $1
+ *
+ * $2
+ *
+ * @param $3
+ * @param $4
+ *
+**/
+$0

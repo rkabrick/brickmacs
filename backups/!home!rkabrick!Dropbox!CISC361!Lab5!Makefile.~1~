@@ -1,0 +1,10 @@
+T1_test : T1.o mi_thread.o
+
+T1.o: T1.c
+	gcc -Wall T1.c
+
+mi_thread: mi_thread.h mi_thread.c
+	gcc -Wall mi_thread.c
+
+clean:
+	rm T1_test T1.o mi_thread.o

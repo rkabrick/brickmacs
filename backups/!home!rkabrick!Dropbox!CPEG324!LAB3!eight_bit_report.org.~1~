@@ -1,0 +1,75 @@
+\begin{center}
+CPEG324
+
+Lab3
+
+By: Ryan Kabrick \& Dawson Fox
+\end{center}
+
+* Abstract
+In this project we successfully implemented an 8-bit calculator in VHDL (Based on the included ISA PDF) using the following components:
+- 8-bit Shift Register
+- Register File Containing 4 Shift Registers
+- 8-bit Adder/Subtractor
+- ALU
+- Datapath
+- Control Logic (Specifics are from the included slides)
+
+* Division of Labor
+*Ryan*:
+- 8-bit Add/Sub & Testbench
+- Register file & Testbench
+- Made report
+
+*Dawson*:
+- ALU & Testbench
+- Datapath & Testbench
+- Control & Testbench
+- RTL Diagrams & Control Logic Diagrams
+
+* Detailed Strategy
+- Create all components seperately
+- Implement testbenches for all of them immediately to ensure proper functioning as we progressed
+- Link components and conduct further testing
+
+** Overall Testbench Logic
+- We ended up scrapping our original testbench as we felt it necessary to test components more thoroughly and to add lines which aided in the debugging process
+- We included manipulation of registers with both positive and negative values
+- We tested the skip function both when it should skip and when it should not skip
+- We tested both add and subtraction functions
+- We tested the display function throughout the final testbench
+- We tested the load immediate functionality
+
+
+* Results
+*Add*:
+- Successfully added the values of two registers and wrote to the destination register
+- Accurate overflow/underflow handling
+
+*Sub*:
+- Successfully subtracted numbers and wrote to the destination register
+- Accurate overflow/underflow handling
+
+*Skip*:
+- Successfully skipped instructions after the comparison of two registers found they were equal
+- Successfully did not skip instructions after the comparison of two registers was found to be not equal
+
+*LI*:
+- Signed integers (4-bit) were able to be loaded to registers
+
+*Print/Display*:
+- Accurately displayed correct register data
+- Handled conversion from STD_LOGIC_VECTOR to signed integer value
+
+* Conclusion
+This project was the most difficult VHDL project we have taken on at this point in our academic career.
+We had to make constant adjustments to our initial thoughts on implementation as we progressed and
+realized our original idea would not provide for accurate communication between components.
+
+We are very glad we provided testbenches for each component after writing it because it ensured we could
+debug much more efficiently than if we only had a testbench for the final product.
+
+Overall, we have learned so much from this project. Although this is just a simple 8-bit calculator, this
+experience has opened our eyes to how more complex ISAs can be implemented; the planning before, the advantages
+and disadvantages associated with designating the functionality of certain bits, along with many more
+examples.

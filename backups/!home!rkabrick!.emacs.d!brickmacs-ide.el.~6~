@@ -1,0 +1,150 @@
+;;; ========= Brickmacs IDE ========= ;;;
+
+;; This file holds all of the general ;;
+;; used by Brickmacs to provide an
+;; IDE like experience
+
+;;; CODE
+
+;; Company (Completion)
+(use-package company
+  :ensure t
+  :init
+  (global-company-mode)
+  :config
+  (setq company-idle-delay 0)
+  (setq company-minimum-prefix-length 3)
+  )
+
+(with-eval-after-load 'company
+  (define-key company-active-map (kbd "M-n") nil)
+  (define-key company-active-map (kbd "M-p") nil)
+  (define-key company-active-map (kdb "C-n") #'company-select-next)
+  (define-key company-active-map (kbd "C-p") #'company-select-previous))
+
+(use-package company-irony
+  :ensure t
+  :config
+  (require 'company)
+  (add-to-list 'company-backends 'company-irony))
+
+(use-package irony
+  :ensure t
+  :config
+  (add-hook 'c++-mode-hook 'irony-mode)
+  (add-hook 'c-mode-hook 'irony-mode)
+  (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options))
+
+(with-eval-after-load 'company
+  (add-hook 'c++-mode-hook 'company-mode)
+  (add-hook 'c-mode-hook 'company-mode))
+
+;; Flycheck (on-the-fly syntax checking)
+( use-package flycheck
+  :ensure t
+  :init (global-flycheck-mode))
+
+;; Ranger
+(use-package ranger
+  :ensure t
+  :commands (ranger)
+  :config
+  (setq ranger-cleanup-eagerly t)
+  )
+
+(use-package yasnippet
+  :ensure t
+  :init (yas-global-mode)
+  ;; All snippets located:
+  ;;~/.emacs.d/snippets/[MAJOR_MODE]/[unexpanded-snippet]
+  )
+
+;; Multiple cursors
+(use-package multiple-cursors
+  :ensure t
+  ;; mc/mark-next-like-this (Place cursor based on words)
+  ;; mc/mark-all-like-this
+  )
+
+;; LOCCUR
+;; This finds all occurences of a given word and allows you to
+;; jump to the one you want
+(use-package loccur
+  :ensure t
+  )
+
+;;; Hungry Delete
+;; This will delete all whitespace (or one character) based on
+;; when the backspace key is pressed
+(use-package smart-hungry-delete
+  :ensure t
+  :bind (("<backspace>" . smart-hungry-delete-backward-char))
+  :defer nil ;; dont defer so we can add our functions to hooks 
+  :config (smart-hungry-delete-add-default-hooks)
+  )
+
+;;; Drag Stuff
+;; This enable you to drag and drop text across emacs
+(use-package drag-stuff
+  :ensure t
+  :init (drag-stuff-global-mode 1)
+  :config
+  (drag-stuff-define-keys) ;; (M-[arrow-key])
+  )
+
+
+;; Relative Line Numbers 
+(use-package linum-relative
+  :ensure t
+  :init (linum-relative-toggle)
+  )
+
+;; Smartparens
+(use-package smartparens
+  :ensure t
+  :init (smartparens-global-mode)
+  )
+
+
+;;; ============== Projectile ================= ;;;
+(use-package projectile
+  :ensure t
+  :init (projectile-mode +1)
+  )
+
+;;; ============== Format All ================= ;;;
+
+;; Automatically format code on save
+;; based on Major Mode
+
+(use-package format-all
+  :ensure t
+  )
+
+;;; ============== Indent Guide =============== ;;;
+;; Show indents based on selected block
+(use-package indent-guide
+  :ensure t
+  )
+
+;;; ============= Aggressive Indent =========== ;;;
+(use-package aggressive-indent
+  :ensure t
+  :init (global-aggressive-indent-mode 1)
+  )
+
+;;; ========= Whitespace Cleanup (on save) ============ ;;;
+(use-package whitespace-cleanup-mode
+  :ensure t
+  :init (global-whitespace-cleanup-mode)
+  )
+
+;;; ============== Origami ============= ;;;
+;; Feature rich code folding
+
+(use-package origami
+  :ensure t
+  :init (global-origami-mode)
+)
+
+(provide 'brickmacs-ide)

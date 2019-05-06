@@ -1,0 +1,57 @@
+;;; -*- coding: utf-8 -*-
+
+;; ----- ido-last-directory-list -----
+(
+ ("/home/rkabrick/Dropbox/CPEG324/" . "LAB2/")
+ ("/home/rkabrick/Dropbox/" . "CPEG324/")
+ ("/home/rkabrick/.emacs.d/" . "snippets/")
+)
+
+;; ----- ido-work-directory-list -----
+(
+ "/home/rkabrick/Dropbox/CPEG324/LAB3/"
+ "/home/rkabrick/Dropbox/CPEG324/LAB4/"
+ "/home/rkabrick/Dropbox/CISC361/Lab5/"
+ "/home/rkabrick/.emacs.d/"
+ "/home/rkabrick/.emacs.d/snippets/org-mode/"
+)
+
+;; ----- ido-work-file-list -----
+(
+ "tb_eight_bit_addsub.vhd"
+ "reg_file.vhd"
+ "test01x.c"
+ "mi_thread.c"
+ "brickmacs.el"
+ "init-brickmacs.el"
+ "init.el"
+ "brickmacs-navigation.el"
+ "brickmacs-c-cpp-mode.el"
+ "brickmacs-ide.el"
+)
+
+;; ----- ido-dir-file-cache -----
+(
+ ("/home/rkabrick/" (23755 28138 915914 107000) ".vagrant.d/" "Desktop/" ".bash_profile" ".bashrc" ".bash_history" ".jssc/" "./" "xv6-public/" ".zcompdump" ".zshrc" ".fonts/" ".AndroidStudio3.4/" ".emacs.d/" ".cache/" "Documents/" "VirtualBox VMs/" ".local/" ".java/" "Downloads/" ".config/" ".var/" ".esd_auth" ".arduino15/" "misc_emacs/" ".dropbox/" "Videos/" "pycparser/" "Dropbox/" "Music/" "Pictures/" "Android/" ".emacs~" "ApkProjects/" "../" "irpc/" ".zshrc~" "snap/" ".android/" ".Genymobile/" "Templates/" ".zcompdump-dupont-Desktop-5.6.2" ".oh-my-zsh/" "Public/" "Arduino/" ".ICEauthority" ".bash_logout" ".emulator_console_auth_token" ".dropbox-dist/" ".mozilla/" ".gitconfig" ".zsh_history" ".directory" ".python_history" ".FreeCAD/" ".texlive2018/" ".pki/" ".appinventor/")
+
+ ("/home/rkabrick/Dropbox/CPEG324/LAB3/" (23753 63121 631128 637000) "shift_reg.vhdl" "./" "shift_reg_8bit.vhdl" "full_adder.vhd" "display.vhd" "../" ".git/" "MUX_4to1.vhdl" ".#tb_reg_file.vhd" "eight_bit_addsub.vhd" "reg_file.vhd" "tb_eight_bit_addsub.vhd")
+
+ ("/home/rkabrick/.emacs.d/" (23750 11232 601466 813000) "fonts/" "data/" "img/" "./" "recentf" "init.el~" "brickmacs-config.el" "projectile-bookmarks.eld" "snippets/" "recentf~" "irony/" "network-security.data" "backups/" "../" ".git/" "init.el" "elpa/" "auto-save-list/" "ido.last" "smex-items" "transient/" "brickmacs-config.org")
+
+ ("/home/rkabrick/Dropbox/CPEG324/LAB2/" (23746 15130 588021 688000) "shift_reg.vhdl" "./" "shift_reg_8bit.vhdl" "tb_eight_bit_addsub.vhd~" "full_adder.vhd" "4to1MUX.jpeg" "tb_eight_bit_addsub" "tb_eight_bit_addsub.o" "work-obj93.cf" "full_adder.vhd~" "eight_bit_addsub.o" "report.pdf" "shift_reg_8bit_tb.vhdl" "shift_reg.jpeg" "shift_reg_tb.vhdl" "e~tb_eight_bit_addsub.o" "report.tex" "display.vhd" "fourBitAddSub_tb.vhd" "report.tex~" "report.org" "fourBitAddSub_tb.vhd~" "../" "full_adder.o" "MUX_4to1.vhdl" "eight_bit_addsub.vhd~" "eight_bit_addsub.vhd" "fourBitAddSub.vhd" "display.vhd~" "fourBitAddSub.o" "fourBitAddSubSchematic.jpg" "MUX_tb.vhdl" "tb_eight_bit_addsub.vhd")
+
+ ("/home/rkabrick/Dropbox/CPEG324/" (23746 15501 611537 788000) "./" "../" "8BitISA.pdf" "LAB2/" ".directory")
+
+ ("/home/rkabrick/Dropbox/" (23749 6088 436868 905000) "dot_config/" "CISC361/" "./" "prepExc/" ".local/" "MATH450/" ".config/" "CPEG324/" ".icons/" ".dropbox" ".dropbox.cache/" "../" ".kde/" "org/" "8BitISA.pdf" "Research/" ".mozilla/" ".directory" "Notability/")
+
+ ("/home/rkabrick/Dropbox/CISC361/" (23749 6088 436868 905000) "Lab5/" "./" "../")
+
+ ("/home/rkabrick/Dropbox/CISC361/Lab5/" (23750 12740 280335 207000) "./" "test01" "mi_thread.c" "test01x.c" "test01.c" "Makefile" "../" "test1" "test01x" "mi_thread.o" "mi_thread.h")
+
+ ("/home/rkabrick/.emacs.d/snippets/org-mode/" (23749 900 175889 93000) "./" "source-block" "../" "sb")
+
+ ("/home/rkabrick/.emacs.d/snippets/" (23747 27833 657829 987000) "./" "../")
+)
+
+;; ----- ido-unc-hosts-cache -----
+t

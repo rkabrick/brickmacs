@@ -1,0 +1,65 @@
+;;; init-brickmacs.el -- Setup Emacs to initalize with Frontmacs
+
+(setq delete-old-versions -1 )		; delete excess backup versions silently
+(setq version-control t )		; use version control
+(setq vc-make-backup-files t )		; make backups file even when in version controlled dir
+(setq backup-directory-alist `(("." . "~/.emacs.d/backups")) ) ; which directory to put backups file
+(setq vc-follow-symlinks t )				       ; don't ask for confirmation when opening symlinked file
+(setq auto-save-file-name-transforms '((".*" "~/.emacs.d/auto-save-list/" t)) ) ;transform backups file name
+(setq inhibit-startup-screen t )	; inhibit useless and old-school startup screen
+(setq ring-bell-function 'ignore )	; silent bell when you make a mistake
+(setq coding-system-for-read 'utf-8 )	; use utf-8 by default
+(setq coding-system-for-write 'utf-8 )
+(setq sentence-end-double-space nil)	; sentence SHOULD end with only a point.
+(setq default-fill-column 80)		; toggle wrapping text at the 80th character
+(setq initial-scratch-message "Welcome in Emacs") ; print a default message in the empty scratch buffer opened at startup
+
+;;; Which-Key
+(use-package which-key
+  :ensure t
+  :init (which-key-mode)
+  :config (setq which-key-idle-delay 0.05)
+  :diminish which-key-mode
+  )
+
+;;; ivy
+(use-package ivy :ensure t
+  :diminish (ivy-mode . "") ; does not display ivy in the modeline
+  :init (ivy-mode 1)        ; enable ivy globally at startup
+  :bind (:map ivy-mode-map  ; bind in the ivy buffer
+         ("C-'" . ivy-avy)) ; C-' to ivy-avy
+  :config
+  (setq ivy-use-virtual-buffers t)   ; extend searching to bookmarks and …
+  (setq ivy-height 20)               ; set height of the ivy window
+  (setq ivy-count-format "(%d/%d) ") ; count format, from the ivy help page
+  )
+
+;;; counsel
+(use-package counsel :ensure t
+  :bind*                           ; load counsel when pressed
+  (("M-x"     . counsel-M-x)       ; M-x use counsel
+   ("C-x C-f" . counsel-find-file) ; C-x C-f use counsel-find-file
+   ("C-x C-r" . counsel-recentf)   ; search recently edited files
+   ("C-c f"   . counsel-git)       ; search for files in git repo
+   ("C-c s"   . counsel-git-grep)  ; search for regexp in git repo
+   ("C-c /"   . counsel-ag)        ; search for regexp in git repo using ag
+   ("C-c l"   . counsel-locate))   ; search for files or else using locate
+  )
+
+
+
+;;(load (expand-file-name "~/.emacs.d/brickmacs-pkg.el"))
+;;(load (expand-file-name "~/.emacs.d/brickmacs-completion.el")) 
+;;(load (expand-file-name "~/.emacs.d/brickmacs-modeline.el"))
+;;(load (expand-file-name "~/.emacs.d/brickmacs-theme.el"))
+(load (expand-file-name "~/.emacs.d/brickmacs-startup.el"))
+(load (expand-file-name "~/.emacs.d/brickmacs-appearance.el"))
+(load (expand-file-name "~/.emacs.d/brickmacs-keybindings.el"))
+(load (expand-file-name "~/.emacs.d/brickmacs-ide.el"))
+(load (expand-file-name "~/.emacs.d/brickmacs-c-cpp-mode.el"))
+(load (expand-file-name "~/.emacs.d/brickmacs-navigation.el"))
+(load (expand-file-name "~/.emacs.d/brickmacs.el"))
+
+
+;; Brickmacs
+(provide 'init-frontmacs)

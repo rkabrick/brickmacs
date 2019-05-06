@@ -1,0 +1,518 @@
+* Startup Tweaks
+** Better Defaults
+Remove unnecessary clutter
+#+BEGIN_SRC emacs-lisp
+(when window-system
+  (blink-cursor-mode 0)                           ; Disable the cursor blinking
+  (scroll-bar-mode 0)                             ; Disable the scroll bar
+  (tool-bar-mode 0)                               ; Disable the tool bar
+  (tooltip-mode 0))                               ; Disable the tooltips
+#+END_SRC
+
+Various improvements to basic functionality
+#+BEGIN_SRC emacs-lisp
+(setq-default
+ ad-redefinition-action 'accept                   ; Silence warnings for redefinition
+ auto-window-vscroll nil                          ; Lighten vertical scroll
+ confirm-kill-emacs 'yes-or-no-p                  ; Confirm before exiting Emacs
+ cursor-in-non-selected-windows t                 ; Hide the cursor in inactive windows
+ delete-by-moving-to-trash t                      ; Delete files to trash
+ display-time-default-load-average nil            ; Don't display load average
+ display-time-format "%H:%M"                      ; Format the time string
+ fill-column 80                                   ; Set width for automatic line breaks
+ help-window-select t                             ; Focus new help windows when opened
+ indent-tabs-mode nil                             ; Stop using tabs to indent
+ inhibit-startup-screen t                         ; Disable start-up screen
+ initial-scratch-message ""                       ; Empty the initial *scratch* buffer
+ left-margin-width 1 right-margin-width 1         ; Add left and right margins
+ mouse-yank-at-point t                            ; Yank at point rather than pointer
+ ns-use-srgb-colorspace nil                       ; Don't use sRGB colors
+ recenter-positions '(5 top bottom)               ; Set re-centering positions
+ scroll-conservatively most-positive-fixnum       ; Always scroll by one line
+ scroll-margin 10                                 ; Add a margin when scrolling vertically
+ select-enable-clipboard t                        ; Merge system's and Emacs' clipboard
+ sentence-end-double-space nil                    ; End a sentence after a dot and a space
+ show-trailing-whitespace nil                     ; Display trailing whitespaces
+ split-height-threshold nil                       ; Disable vertical window splitting
+ split-width-threshold nil                        ; Disable horizontal window splitting
+ tab-width 4                                      ; Set width for tabs
+ uniquify-buffer-name-style 'forward              ; Uniquify buffer names
+ window-combination-resize t                      ; Resize windows proportionally
+ x-stretch-cursor t)                              ; Stretch cursor to the glyph width
+(cd "~/")                                         ; Move to the user directory
+(delete-selection-mode 1)                         ; Replace region when inserting text
+(display-time-mode 1)                             ; Enable time in the mode-line
+(fringe-mode 0)                                   ; Disable fringes
+(fset 'yes-or-no-p 'y-or-n-p)                     ; Replace yes/no prompts with y/n
+(global-subword-mode 1)                           ; Iterate through CamelCase words
+(menu-bar-mode 0)                                 ; Disable the menu bar
+(mouse-avoidance-mode 'banish)                    ; Avoid collision of mouse with point
+(put 'downcase-region 'disabled nil)              ; Enable downcase-region
+(put 'upcase-region 'disabled nil)                ; Enable upcase-region
+(set-default-coding-systems 'utf-8)               ; Default to utf-8 encoding
+(setq delete-old-versions -1 )		; delete excess backup versions silently
+(setq version-control t )		; use version control
+(setq vc-make-backup-files t )		; make backups file even when in version controlled dir
+(setq backup-directory-alist `(("." . "~/.emacs.d/backups")) ) ; which directory to put backups file
+(setq vc-follow-symlinks t )                       ; don't ask for confirmation when opening symlinked file
+(setq auto-save-file-name-transforms '((".*" "~/.emacs.d/auto-save-list/" t)) ) ;transform backups file name
+(setq inhibit-startup-screen t )	; inhibit useless and old-school startup screen
+(setq ring-bell-function 'ignore )	; silent bell when you make a mistake
+(setq coding-system-for-read 'utf-8 )	; use utf-8 by default
+(setq coding-system-for-write 'utf-8 )
+(setq sentence-end-double-space nil)	; sentence SHOULD end with only a point.
+(setq default-fill-column 80)		; toggle wrapping text at the 80th character
+(setq linum-relative-backend 'display-line-numbers-mode)
+
+;; Garbage collect on focus out
+(add-hook 'focus-out-hook #'garbage-collect)
+#+END_SRC
+
+** Dashboard
+#+BEGIN_SRC emacs-lisp
+;; Dashboard
+(use-package dashboard
+  :ensure t
+  :config
+    (dashboard-setup-startup-hook)
+    (setq dashboard-startup-banner "~/.emacs.d/img/dashLogo.png")
+    (setq dashboard-items '((recents  . 5)
+                            (projects . 5)))
+    (setq dashboard-banner-logo-title "Welcome to Brickmacs"))
+#+END_SRC
+
+* Custom Functions
+** Edit Config
+#+BEGIN_SRC emacs-lisp
+(defun edit-config ()
+   (interactive)
+   (find-file "~/.emacs.d/brickmacs-config.org"))
+#+END_SRC
+
+** Reload Config
+#+BEGIN_SRC emacs-lisp
+(defun reload-config()
+    (interactive)
+    (org-babel-load-file (expand-file-name "~/.emacs.d/brickmacs-config.org")))
+#+END_SRC
+
+* Appearance
+** Theme
+#+BEGIN_SRC emacs-lisp
+;;(use-package doom-themes
+;;  :ensure t
+;;  :init (load-theme 'doom-vibrant t)
+;; :config
+;;  ;; Enable flashing mode-line on errors
+;;  (doom-themes-visual-bell-config)
+
+  ;; Enable custom neotree theme (all-the-icons must be installed!)
+;;  (doom-themes-neotree-config)
+
+  ;; or for treemacs users
+;;  (doom-themes-treemacs-config)
+
+  ;; Corrects (and improves) org-mode's native fontification.
+;;  (doom-themes-org-config)
+;;  )
+(load-file (expand-file-name "~/.emacs.d/brickmacs-theme.el"))
+(require 'brickmacs-theme)
+(load-theme 'brickmacs)
+#+END_SRC
+
+** Modeline
+#+BEGIN_SRC emacs-lisp
+(use-package doom-modeline
+  :ensure t
+  :init (doom-modeline-mode 1)
+  :config
+  ;; How tall the mode-line should be (only respected in GUI Emacs).
+  (setq doom-modeline-height 25)
+
+  ;; How wide the mode-line bar should be (only respected in GUI Emacs).
+  (setq doom-modeline-bar-width 3)
+
+  ;; Whether display icons in mode-line or not.
+  (setq doom-modeline-icon t)
+
+  ;; Whether display the icon for major mode. It respects `doom-modeline-icon'.
+  (setq doom-modeline-major-mode-icon t)
+
+  ;; Whether display color icons for `major-mode'. It respects
+  ;; `doom-modeline-icon' and `all-the-icons-color-icons'.
+  (setq doom-modeline-major-mode-color-icon t)
+
+  ;; Whether display icons for buffer states. It respects `doom-modeline-icon'.
+  (setq doom-modeline-buffer-state-icon t)
+
+  ;; Whether display buffer modification icon. It respects `doom-modeline-icon'
+  ;; and `doom-modeline-buffer-state-icon'.
+  (setq doom-modeline-buffer-modification-icon t)
+
+  ;; Whether display minor modes in mode-line or not.
+  (setq doom-modeline-minor-modes nil)
+
+  ;; If non-nil, a word count will be added to the selection-info modeline segment.
+  (setq doom-modeline-enable-word-count nil)
+
+  ;; If non-nil, only display one number for checker information if applicable.
+  (setq doom-modeline-checker-simple-format t)
+
+  ;; The maximum displayed length of the branch name of version control.
+  (setq doom-modeline-vcs-max-length 12)
+
+  ;; Whether display perspective name or not. Non-nil to display in mode-line.
+  (setq doom-modeline-persp-name t)
+
+  ;; Whether display `lsp' state or not. Non-nil to display in mode-line.
+  (setq doom-modeline-lsp t)
+
+  ;; Whether display github notifications or not. Requires `ghub` package.
+  (setq doom-modeline-github nil)
+
+  ;; The interval of checking github.
+  (setq doom-modeline-github-interval (* 30 60))
+
+  ;; Whether display environment version or not
+  (setq doom-modeline-env-version t)
+  ;; Or for individual languages
+  (setq doom-modeline-env-enable-python t)
+  (setq doom-modeline-env-enable-ruby t)
+  (setq doom-modeline-env-enable-perl t)
+  (setq doom-modeline-env-enable-go t)
+  (setq doom-modeline-env-enable-elixir t)
+  (setq doom-modeline-env-enable-rust t)
+
+  ;; Change the executables to use for the language version string
+  (setq doom-modeline-env-python-executable "python")
+  (setq doom-modeline-env-ruby-executable "ruby")
+  (setq doom-modeline-env-perl-executable "perl")
+  (setq doom-modeline-env-go-executable "go")
+  (setq doom-modeline-env-elixir-executable "iex")
+  (setq doom-modeline-env-rust-executable "rustc")
+
+  ;; Whether display mu4e notifications or not. Requires `mu4e-alert' package.
+  (setq doom-modeline-mu4e t)
+
+  ;; Whether display irc notifications or not. Requires `circe' package.
+  (setq doom-modeline-irc t)
+
+  ;; Function to stylize the irc buffer names.
+  (setq doom-modeline-irc-stylize 'identity)
+  )
+#+END_SRC
+
+** all-the-icons
+#+BEGIN_SRC emacs-lisp
+
+(use-package all-the-icons
+  :ensure t
+  :init
+  )
+#+END_SRC
+
+* Evil
+** Evil Leader Key
+#+BEGIN_SRC emacs-lisp
+(use-package evil-leader
+  :ensure t
+  :init
+  (global-evil-leader-mode 1)
+  :config
+  (evil-leader/set-leader "<SPC>")
+  (evil-leader/set-key
+    "s" 'ido-goto-symbol
+    "f" 'ido-find-file
+    "pf" 'ido-find-file-in-dir
+    "B" 'ido-switch-buffer
+    "b" 'ibuffer
+    "k" 'ido-kill-buffer
+    "d" 'deer-mode
+    "w" 'evil-write
+    "cl" 'evilnc-comment-or-uncomment-lines
+    "cp" 'evilnc-comment-or-uncomment-paragraphs
+    "aw" 'ace-window
+    "ce" 'edit-config
+    "cr" 'reload-config
+    )
+  )
+#+END_SRC
+
+** Evil Setup
+#+BEGIN_SRC emacs-lisp
+(use-package evil
+  :ensure t
+  :init (evil-mode 1)
+  :config
+  (define-key evil-motion-state-map (kbd "M-h") 'evil-window-left)
+  (define-key evil-motion-state-map (kbd "M-j") 'evil-window-down)
+  (define-key evil-motion-state-map (kbd "M-k") 'evil-window-up)
+  (define-key evil-motion-state-map (kbd "M-l") 'evil-window-right)
+  (define-key evil-motion-state-map (kbd "M-n") 'evil-window-new)
+  (define-key evil-motion-state-map (kbd "M-2") 'split-window-horizontally)
+  (define-key evil-motion-state-map (kbd "M-3") 'split-window-vertically)
+
+  (evil-define-key 'visual evil-surround-mode-map "s" 'evil-surround-region)
+  (define-key evil-motion-state-map "gt" 'evil-jump-to-tag)
+  (define-key evil-motion-state-map "gk" 'evil-ace-jump-word-mode)
+  )
+#+END_SRC
+
+* IDE
+** Company
+#+BEGIN_SRC emacs-lisp
+(use-package company
+  :ensure t
+  :init
+  (global-company-mode)
+  :config
+  (setq company-idle-delay 0)
+  (setq company-minimum-prefix-length 3)
+  )
+
+(with-eval-after-load 'company
+  (define-key company-active-map (kbd "M-n") nil)
+  (define-key company-active-map (kbd "M-p") nil)
+  (define-key company-active-map (kbd "C-n") #'company-select-next)
+  (define-key company-active-map (kbd "C-p") #'company-select-previous))
+#+END_SRC
+
+** Flycheck
+#+BEGIN_SRC emacs-lisp
+;; Flycheck (on-the-fly syntax checking)
+( use-package flycheck
+  :ensure t
+  :init (global-flycheck-mode))
+#+END_SRC
+
+** Ranger
+#+BEGIN_SRC emacs-lisp
+;; Ranger
+(use-package ranger
+  :ensure t
+  :commands (ranger)
+  :config
+  (setq ranger-cleanup-eagerly t)
+  )
+#+END_SRC
+
+** Yasnippet
+#+BEGIN_SRC emacs-lisp
+(use-package yasnippet
+  :ensure t
+  :init (yas-global-mode 1)
+  ;; mc/mark-next-like-this (Place cursor based on words)
+  ;; mc/mark-all-like-this
+  )
+#+END_SRC
+
+** Multiple Cursors
+#+BEGIN_SRC emacs-lisp
+(use-package multiple-cursors
+  :ensure t
+  ;; mc/mark-next-like-this (Place cursor based on words)
+  ;; mc/mark-all-like-this
+  )
+#+END_SRC
+
+** Loccur
+#+BEGIN_SRC emacs-lisp
+(use-package loccur
+    :ensure t)
+#+END_SRC
+
+** Hungry Delete
+#+BEGIN_SRC emacs-lisp
+;;; Hungry Delete
+;; This will delete all whitespace (or one character) based on
+;; when the backspace key is pressed
+(use-package smart-hungry-delete
+  :ensure t
+  :bind (("<backspace>" . smart-hungry-delete-backward-char))
+  :defer nil ;; dont defer so we can add our functions to hooks
+  :config (smart-hungry-delete-add-default-hooks)
+  )
+#+END_SRC
+
+** Drag Stuff
+#+BEGIN_SRC emacs-lisp
+;;; Drag Stuff
+;; This enable you to drag and drop text across emacs
+(use-package drag-stuff
+  :ensure t
+  :init (drag-stuff-global-mode 1)
+  :config
+  (drag-stuff-define-keys) ;; (M-[arrow-key])
+  )
+#+END_SRC
+
+** Relative Line Numbers
+#+BEGIN_SRC emacs-lisp
+(use-package linum
+    :ensure t
+)
+;; Relative Line Numbers
+(use-package linum-relative
+    :ensure t
+    :init (linum-relative-global-mode))
+#+END_SRC
+
+** Projectile
+#+BEGIN_SRC emacs-lisp
+(use-package projectile
+  :ensure t
+  :init (projectile-mode +1)
+  )
+#+END_SRC
+
+** Format All
+#+BEGIN_SRC emacs-lisp
+(use-package format-all
+    :ensure t)
+#+END_SRC
+
+** Indent Guide
+#+BEGIN_SRC emacs-lisp
+(use-package indent-guide
+  :ensure t
+  )
+
+#+END_SRC
+
+** Aggressive Indent
+#+BEGIN_SRC emacs-lisp
+(use-package aggressive-indent
+  :ensure t
+  :init (global-aggressive-indent-mode 1)
+  )
+#+END_SRC
+
+** Origami
+#+BEGIN_SRC emacs-lisp
+(use-package origami
+  :ensure t
+  :init (global-origami-mode)
+)
+#+END_SRC
+
+** Whitespace Cleanup
+#+BEGIN_SRC emacs-lisp
+(use-package whitespace-cleanup-mode
+  :ensure t
+  :init (global-whitespace-cleanup-mode)
+  )
+#+END_SRC
+
+** C/C++ Mode
+*** Irony
+#+BEGIN_SRC emacs-lisp
+;; Company (Completion)
+(use-package company-irony
+  :ensure t
+  :config
+  (require 'company)
+  (add-to-list 'company-backends 'company-irony))
+
+(use-package irony
+  :ensure t
+  :config
+  (add-hook 'c++-mode-hook 'irony-mode)
+  (add-hook 'c-mode-hook 'irony-mode)
+  (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options))
+
+(with-eval-after-load 'company
+  (add-hook 'c++-mode-hook 'company-mode)
+  (add-hook 'c-mode-hook 'company-mode))
+#+END_SRC
+
+* Navigation
+** Ivy
+#+BEGIN_SRC emacs-lisp
+(use-package ivy :ensure t
+  :diminish (ivy-mode . "") ; does not display ivy in the modeline
+  :init (ivy-mode 1)        ; enable ivy globally at startup
+  :bind (:map ivy-mode-map  ; bind in the ivy buffer
+         ("C-'" . ivy-avy)) ; C-' to ivy-avy
+  :config
+  (setq ivy-use-virtual-buffers t)   ; extend searching to bookmarks and …
+  (setq ivy-height 20)               ; set height of the ivy window
+  (setq ivy-count-format "(%d/%d) ") ; count format, from the ivy help page
+  )
+#+END_SRC
+
+** Counsel
+#+BEGIN_SRC emacs-lisp
+(use-package counsel :ensure t
+  :bind*                           ; load counsel when pressed
+  (("M-x"     . counsel-M-x)       ; M-x use counsel
+   ("C-x C-f" . counsel-find-file) ; C-x C-f use counsel-find-file
+   ("C-x C-r" . counsel-recentf)   ; search recently edited files
+   ("C-c f"   . counsel-git)       ; search for files in git repo
+   ("C-c s"   . counsel-git-grep)  ; search for regexp in git repo
+   ("C-c /"   . counsel-ag)        ; search for regexp in git repo using ag
+   ("C-c l"   . counsel-locate))   ; search for files or else using locate
+  )
+#+END_SRC
+
+** Which-Key
+#+BEGIN_SRC emacs-lisp
+(use-package which-key
+  :ensure t
+  :init (which-key-mode)
+  :config (setq which-key-idle-delay 0.05)
+  :diminish which-key-mode
+  )
+#+END_SRC
+
+** Ace-Window
+#+BEGIN_SRC emacs-lisp
+;; Select window by selecting character present in top corner
+(use-package ace-window
+  :ensure t
+  :config
+  (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
+  )
+#+END_SRC
+
+** ido
+#+BEGIN_SRC emacs-lisp
+(use-package ido
+  :ensure t
+  :config
+  (setq ido-enable-flex-matching nil)
+  (setq ido-create-new-buffer 'always)
+  (setq ido-everywhere t)
+  (ido-mode 1)
+  (setq ido-enable-prefix t)
+)
+
+(use-package ido-vertical-mode
+  :ensure t
+  :init
+  (ido-vertical-mode 1)
+  (setq ido-vertical-define-keys 'C-n-and-C-p-only))
+#+END_SRC
+
+** Avy
+#+BEGIN_SRC emacs-lisp
+(use-package avy
+  :ensure t
+  :bind
+  ("M-s" . avy-goto-char))
+#+END_SRC
+
+** Smex
+#+BEGIN_SRC emacs-lisp
+(use-package smex
+  :ensure t
+  :init (smex-initialize)
+  :bind ("M-x" . smex)
+  )
+#+END_SRC
+* Misc
+** Rainbow
+#+BEGIN_SRC emacs-lisp
+(use-package rainbow-mode
+    :ensure t
+    :init (rainbow-mode 1))
+#+END_SRC

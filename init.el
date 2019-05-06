@@ -24,17 +24,19 @@
 
 (require 'use-package)
 
-(load (expand-file-name "~/.emacs.d/init-brickmacs.el")) 
-
+(org-babel-load-file (expand-file-name "~/.emacs.d/brickmacs-config.org"))  
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   (quote
+    ("dc9a506e2c7de79195e446d3433982fe487d8d6f605d6f1b991a3aa410ef7ce2" default)))
  '(package-selected-packages
    (quote
-    (evil-leader-mode yasnippet which-key web-mode use-package smex smartparens multiple-cursors magit linum-relative irony git-timemachine git-link general flycheck flx evil-leader drag-stuff doom-themes doom-modeline dashboard crux counsel-projectile company ace-window))))
+    (org-download rainbow-mode yasnippet whitespace-cleanup-mode which-key use-package smex smartparens smart-hungry-delete ranger projectile origami multiple-cursors loccur linum-relative indent-guide ido-vertical-mode format-all flycheck evil-leader drag-stuff doom-themes doom-modeline dashboard counsel company-irony aggressive-indent ace-window))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

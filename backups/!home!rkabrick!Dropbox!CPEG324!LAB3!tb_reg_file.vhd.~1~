@@ -1,0 +1,84 @@
+library ieee;
+use ieee.std_logic_1164.all;
+
+entity tb_reg_file is
+end tb_reg_file;
+
+architecture dataflow of tb_reg_file is
+  component reg_file
+    port( source1, source2, write_reg : in std_logic_vector(1 downto 0);
+          write_data : in std_logic_vector(7 downto 0);
+          clk : in std_logic;
+          write_en : in std_logic;
+          read_en : in std_logic;
+          data1, data2 : out std_logic_vector(7 downto 0)
+          );
+  end component reg_file;
+
+  signal tb_clk : std_logic := '0';
+  signal tb_source1, tb_source2, tb_write_reg: std_logic_vector(1 downto 0);
+  signal tb_write_data : std_logic_vector(7 downto 0);
+  signal tb_write_en, tb_read_en : std_logic;
+  signal tb_data1, tb_data2 : std_logic_vector(7 downto 0);
+
+begin
+  uut: reg_file
+    port map(
+      source1 => tb_source1,
+      source2 => tb_source2,
+      write_reg => tb_write_reg,
+      clk => tb_clk,
+      write_data => tb_write_data,
+      write_en => tb_write_en,
+      read_en => tb_read_en,
+      data1 => tb_data1,
+      data2 => tb_data2
+      );
+  process(tb_clk)
+  begin
+    tb_clk <= '0', '1' after 1 ns;
+    wait for 2 ns;
+  end process;
+
+  process
+      type pattern_type is record
+      tb_source1 : std_logic_vector(1 downto 0);
+      tb_source2 : std_logic_vector(1 downto 0);
+      tb_write_reg : std_logic_vector(1 downto 0);
+      tb_write_data : std_logic_vector(7 downto 0);
+      tb_write_en : std_logic;
+      tb_read_en : std_logic;
+      tb_data1 : std_logic_vector(7 downto 0);
+      tb_data2 : std_logic_vector(7 downto 0);
+    end record;
+
+    type pattern_array is array (natural range <>) of pattern_type;
+    constant patterns : pattern_array :=
+      (("00","01","10","00000000",'1','1',"00000000","00000000"),
+       ("00","01","10","00000000",'1','1',"00000000","00000000"));
+
+  begin
+
+    for n in patterns'range loop
+      tb_source1 <= patterns(n).tb_source1;
+      tb_source2 <= patterns(n).tb_source2;
+      tb_write_reg <= patterns(n).tb_write_reg;
+      tb_write_data <= patterns(n).tb_write_data;
+      tb_write_en <= patterns(n).tb_write_en;
+      tb_read_en <= patterns(n).tb_read_en;
+
+      wait for 2 ns;
+
+      assert tb_data1 = patterns(n).tb_data1
+          report "Inaccurate Data 1" severity error;
+
+        assert tb_data2 = patterns(n).tb_data2
+          report "Inaccurate Data 2" severity error;
+
+    end loop;
+
+    assert false report "end of tests" severity note;
+
+    wait;
+  end process;
+end architecture;

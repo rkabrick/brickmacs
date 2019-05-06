@@ -1,0 +1,83 @@
+library ieee;
+use ieee.std_logic_1164.all;
+
+entity reg_file is
+  port( source1, source2, write_reg  : in std_logic_vector(1 downto 0);
+        write_data   : in std_logic_vector(7 downto 0);
+        clk         : in std_logic;
+        write_en    : in std_logic;
+  	read_en     : in std_logic;
+        data1, data2 : out std_logic_vector(7 downto 0)
+        );
+end entity reg_file;
+
+architecture dataflow of reg_file is
+  component shift_reg_8bit is
+    port(I:            in std_logic_vector(7 downto 0);
+         I_SHIFT_IN:   in std_logic;
+         sel:          in std_logic_vector(1 downto 0);
+         clock:        in std_logic;
+         enable:       in std_logic;
+         o:            out std_logic_vector(7 downto 0)
+         );
+  end component;
+
+  signal input : std_logic_vector(7 downto 0);
+  signal operation1, operation2, operation3, operation4 : std_logic_vector(1 downto 0);
+  signal reg1_data : std_logic_vector(7 downto 0);
+  signal reg2_data : std_logic_vector(7 downto 0);
+  signal reg3_data : std_logic_vector(7 downto 0);
+  signal reg4_data : std_logic_vector(7 downto 0);
+  signal en1,en2,en3,en4 : std_logic := '1';
+
+begin
+  reg1 : shift_reg_8bit port map(I => input,
+                                 I_SHIFT_IN => '0',
+                                 sel => operation1,
+                                 clock => clk,
+                                 enable => en1,
+                                 o => reg1_data);
+
+  reg2 : shift_reg_8bit port map(I => input,
+                                 I_SHIFT_IN => '0',
+                                 sel => operation2,
+                                 clock => clk,
+                                 enable => en2,
+                                 o => reg2_data);
+
+  reg3 : shift_reg_8bit port map(I => input,
+                                 I_SHIFT_IN => '0',
+                                 sel => operation3, 
+                                 clock => clk,
+                                 enable => en3,
+                                 o => reg3_data);
+
+  reg4 : shift_reg_8bit port map(I => input,
+                                 I_SHIFT_IN => '0',
+                                 sel => operation4,
+                                 clock => clk,
+                                 enable => en4,
+                                 o => reg4_data);
+
+  input <= write_data;
+  operation1 <= "11" when (write_reg = "00" and write_en = '1') else "00";
+  operation2 <= "11" when (write_reg = "01" and write_en = '1') else "00";
+  operation3 <= "11" when (write_reg = "10" and write_en = '1') else "00";
+  operation4 <= "11" when (write_reg = "11" and write_en = '1') else "00";
+  
+
+  en1 <= '1' when (write_reg = "00" and (read_en = '1' or write_en = '1')) else '0';
+  en2 <= '1' when (write_reg = "01" and (read_en = '1' or write_en = '1')) else '0';
+  en3 <= '1' when (write_reg = "10" and (read_en = '1' or write_en = '1')) else '0';
+  en4 <= '1' when (write_reg = "11" and (read_en = '1' or write_en = '1')) else '0';
+
+  data1   <= reg1_data when source1 = "00" else
+             reg2_data when source1 = "01" else
+             reg3_data when source1 = "10" else
+             reg4_data when source1 = "11";
+
+  data2   <= reg1_data when source2 = "00" else
+             reg2_data when source2 = "01" else
+             reg3_data when source2 = "10" else
+             reg4_data when source2 = "11";
+end dataflow;

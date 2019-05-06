@@ -1,0 +1,36 @@
+;;; ============= Brickmacs Navigation ============ ;;;
+
+;; List of packages which enhance users
+;; experience when navigating within emacs
+
+;; Select window by selecting character present in top corner
+(use-package ace-window
+  :ensure t
+  :config
+  (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
+  )
+
+(use-package ido
+  :ensure t
+  :config
+  (setq ido-enable-flex-matching nil)
+  (setq ido-create-new-buffer 'always)
+  (setq ido-everywhere t)
+  (ido-mode 1)
+  )
+
+(use-package ido-vertical-mode
+  :ensure t
+  :init
+  (ido-vertical-mode 1)
+  (setq ido-vertical-define-keys 'C-n-and-C-p-only))
+
+
+(use-package smex
+  :ensure t
+  :init (smex-initialize)
+  :bind ("M-x" . smex)
+  )
+
+
+(provide 'brickmacs-navigation)

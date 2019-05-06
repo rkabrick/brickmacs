@@ -1,0 +1,132 @@
+% Created 2019-05-02 Thu 17:56
+% Intended LaTeX compiler: pdflatex
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{grffile}
+\usepackage{longtable}
+\usepackage{wrapfig}
+\usepackage{rotating}
+\usepackage[normalem]{ulem}
+\usepackage{amsmath}
+\usepackage{textcomp}
+\usepackage{amssymb}
+\usepackage{capt-of}
+\usepackage{hyperref}
+\author{Ryan Kabrick}
+\date{\today}
+\title{}
+\hypersetup{
+ pdfauthor={Ryan Kabrick},
+ pdftitle={},
+ pdfkeywords={},
+ pdfsubject={},
+ pdfcreator={Emacs 26.1 (Org mode 9.1.9)}, 
+ pdflang={English}}
+\begin{document}
+
+\tableofcontents
+
+\begin{center}
+CPEG324
+
+Lab3
+
+By: Ryan Kabrick \& Dawson Fox
+\end{center}
+
+\section{Abstract}
+\label{sec:orgbfae8a4}
+In this project we successfully implemented an 8-bit calculator in VHDL (Based on the included ISA PDF) using the following components:
+\begin{itemize}
+\item 8-bit Shift Register
+\item Register File Containing 4 Shift Registers
+\item 8-bit Adder/Subtractor
+\item ALU
+\item Datapath
+\item Control Logic (Specifics are from the included slides)
+\end{itemize}
+
+\section{Division of Labor}
+\label{sec:orgf107b77}
+\textbf{Ryan}:
+\begin{itemize}
+\item 8-bit Add/Sub \& Testbench
+\item Register file \& Testbench
+\item Made report
+\end{itemize}
+
+\textbf{Dawson}:
+\begin{itemize}
+\item ALU \& Testbench
+\item Datapath \& Testbench
+\item Control \& Testbench
+\item RTL Diagrams \& Control Logic Diagrams
+\end{itemize}
+
+\section{Detailed Strategy}
+\label{sec:org2b441b4}
+\begin{itemize}
+\item Create all components seperately
+\item Implement testbenches for all of them immediately to ensure proper functioning as we progressed
+\item Link components and conduct further testing
+\end{itemize}
+
+\subsection{Overall Testbench Logic}
+\label{sec:orga0e4140}
+\begin{itemize}
+\item We ended up scrapping our original testbench as we felt it necessary to test components more thoroughly and to add lines which aided in the debugging process
+\item We included manipulation of registers with both positive and negative values
+\item We tested the skip function both when it should skip and when it should not skip
+\item We tested both add and subtraction functions
+\item We tested the display function throughout the final testbench
+\item We tested the load immediate functionality
+\end{itemize}
+
+
+\section{Results}
+\label{sec:org4a29287}
+\textbf{Add}:
+\begin{itemize}
+\item Successfully added the values of two registers and wrote to the destination register
+\item Accurate overflow/underflow handling
+\end{itemize}
+
+\textbf{Sub}:
+\begin{itemize}
+\item Successfully subtracted numbers and wrote to the destination register
+\item Accurate overflow/underflow handling
+\end{itemize}
+
+\textbf{Skip}:
+\begin{itemize}
+\item Successfully skipped instructions after the comparison of two registers found they were equal
+\item Successfully did not skip instructions after the comparison of two registers was found to be not equal
+\end{itemize}
+
+\textbf{LI}:
+\begin{itemize}
+\item Signed integers (4-bit) were able to be loaded to registers
+\end{itemize}
+
+\textbf{Print/Display}:
+\begin{itemize}
+\item Accurately displayed correct register data
+\item Handled conversion from STD\(_{\text{LOGIC}}\)\(_{\text{VECTOR}}\) to signed integer value
+\end{itemize}
+
+\section{Conclusion}
+\label{sec:orge364b52}
+This project was the most difficult VHDL project we have taken on at this point in our academic career.
+We had to make constant adjustments to our initial thoughts on implementation as we progressed and
+realized our original idea would not provide for accurate communication between components.
+
+We are very glad we provided testbenches for each component after writing it because it ensured we could
+debug much more efficiently than if we only had a testbench for the final product.
+
+Overall, we have learned so much from this project. Although this is just a simple 8-bit calculator, this
+experience has opened our eyes to how more complex ISAs can be implemented; the planning before, the advantages
+and disadvantages associated with designating the functionality of certain bits, along with many more
+examples.
+\end{document}

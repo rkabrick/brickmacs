@@ -1,0 +1,155 @@
+#include "mi_thread.h"
+#include <stdio.h>
+
+/* Pointer to running TCB */
+struct tcb *running;
+
+/* Pointer to Queue */
+struct tcb *ready;
+
+/*====================================================================*/
+void t_init(){
+/**
+ * @brief: Initialize thread library
+ **/
+/*====================================================================*/
+  tcb *main;
+  main = (tcb *)malloc(sizeof(tcb));
+
+  // Init = Context of main()
+  getcontext(&main -> thread_context);
+  running = main;
+
+  main -> thread_id = 0;
+  main -> thread_priority = 0;
+  main -> next = NULL;
+
+  running = main;
+}
+
+
+/*====================================================================*/
+int t_create(void (*func)(int), int thr_id, int pri){
+  /**
+   * @brief Create new thread based on input parameters
+   *
+   * @param func: Function to be run by new thread
+   * @param thr_id: New threads thread ID
+   * @param pri: New threads priority
+   *
+   **/
+  /*====================================================================*/
+
+  /* Allocate memory on stack */
+  size_t sz = 0x10000;
+
+  tcb *uc, *temp;
+  temp = ready;
+  uc = (tcb*)malloc(sizeof(tcb));
+
+  uc -> thread_priority = pri;
+  uc -> thread_id = thr_id;
+
+  getcontext(&uc -> thread_context);
+
+  uc -> thread_context.uc_stack.ss_sp = malloc(sz);
+  uc -> thread_context.uc_stack.ss_size = sz;
+  uc -> thread_context.uc_stack.ss_flags = 0;
+
+  makecontext(&uc -> thread_context, (void(*)(void)) func, 2, pri, thr_id);
+
+  printf("Creating Thread %d\n", uc -> thread_id);
+  uc -> next = NULL;
+
+  /* Iterate through running list */
+  if (ready == NULL){
+    ready = uc;
+  }
+
+ else {
+   while(temp -> next != NULL){
+     temp = temp -> next;
+   }
+   temp -> next = uc;
+ }
+
+return 1;
+}
+
+
+/*====================================================================*/
+void t_shutdown(){
+/**
+ * @brief: Shut down thread library
+ *
+ * Frees all dynamically allocated memory, effectively terminating
+ * the thread library
+ *
+ **/
+/*====================================================================*/
+  printf("Shutting down mi_thread\n");
+
+  struct tcb *temp = ready;
+  struct tcb *next;
+
+  while (temp != NULL){
+    next = temp -> next;
+    free(temp -> thread_context.uc_stack.ss_sp);
+    free(temp);
+    temp = next;
+  }
+
+  ready = NULL;
+}
+
+
+/*====================================================================*/
+void t_terminate(){
+/**
+ * @brief: Terminate calling thread
+ *
+ * Removes tcb from "running" queue and resumes execution of thread
+ * in the head of the "ready" queue via setcontext();
+ *
+ **/
+/*====================================================================*/
+  tcb *temp = running;
+  tcb *ready_head = ready;
+
+  if (ready_head != NULL){
+    ready_head -> next = NULL;
+  }
+
+  running = ready_head;
+
+  if(ready != NULL){
+    ready = ready -> next;
+  }
+
+  free(temp -> thread_context.uc_stack.ss_sp);
+  free(temp);
+  setcontext(&running -> thread_context);
+}
+
+/*====================================================================*/
+void t_yield(){
+/**
+ * @brief: Calling thread relinquishes CPU and is placed at end of
+ * ready queue
+ *
+ **/
+/*====================================================================*/
+  tcb *running_head = running;
+  tcb *temp = ready;
+
+  running_head -> next = NULL;
+
+  if(temp != NULL){
+    temp = temp -> next;
+  }
+
+  temp -> next = running_head;
+  running = ready;
+  ready = ready -> next;
+  swapcontext((&running_head -> thread_context), (&running -> thread_context));
+}

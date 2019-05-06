@@ -1,0 +1,10 @@
+#name: file-comment
+#key: filec
+# --
+/**
+ * @file   $1
+ * @brief  $2
+ * @author $3
+ * @date   `(current-time-string)`
+ *
+**/

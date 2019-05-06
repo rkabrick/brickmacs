@@ -1,1 +1,1 @@
-("~/Dropbox/Research/ANL/irpc/" "~/xv6-public/" "~/.emacs.d/")
+("~/irpc/" "~/Dropbox/CPEG324/LAB3/" "~/.emacs.d/" "~/Dropbox/Research/ANL/irpc/" "~/Dropbox/CISC361/Lab5/" "~/xv6-public/")

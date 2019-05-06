@@ -1,0 +1,51 @@
+/**
+ * @file   mi_thread.h
+ *
+ * @brief  User-Level Thread Library
+ * @author Ryan Kabrick & Dawson Fox
+ * @date   Sat Apr 27 23:23:55 2019
+ *
+ **/
+
+
+/*====================================================================*/
+void t_init();
+/**
+    Initialize thread library by setting up the "running" and the
+    "ready" queues, creating TCB of the "main" thread, and inserting
+    it into the running queue
+**/
+/*====================================================================*/
+
+
+/*====================================================================*/
+void t_shutdown();
+/**
+    Shut down the thread library by freeing all the dynamically
+    allocated memory
+**/
+/*====================================================================*/
+
+
+/*====================================================================*/
+int t_create(void (*func)(int), int thr_id, int pri);
+/**
+    Create a thread with:
+    * priority = pri
+    * function = func
+    * thread id = thr_id
+
+    The parent calling t_create() continues its execution upon
+    returning from t_create();
+**/
+/*====================================================================*/
+
+
+/*====================================================================*/
+void t_terminate();
+/**
+ Terminate the calling thread by removing (and freeing) its TCB
+ from the "running" queue, and resuming execution of the thread
+ in the head of the "ready queue via setcontext();
+**/
+/*====================================================================*/

@@ -1,0 +1,187 @@
+#include "mi_thread.h"
+#include <stdio.h>
+
+/* Pointer to running TCB */
+struct tcb *running;
+
+/* Pointer to Queue */
+struct tcb *ready;
+
+/*====================================================================*/
+void t_init(){
+  /**
+   * @brief: Initialize thread library
+   **/
+  /*====================================================================*/
+  tcb *main; // tcb used to hold the context of the main function
+  main = (tcb *)malloc(sizeof(tcb));
+
+  // Init = Context of main()
+  getcontext(&main -> thread_context);
+
+  // Thread id of main is 0
+  main -> thread_id = 0;
+
+  // Thread priority is the most important
+  main -> thread_priority = 0;
+
+  // No other threads active
+  main -> next = NULL;
+
+  // Set running tcb to the main function
+  running = main;
+}
+
+
+/*====================================================================*/
+int t_create(void (*func)(int), int thr_id, int pri){
+  /**
+   * @brief Create new thread based on input parameters
+   *
+   * @param func: Function to be run by new thread
+   * @param thr_id: New threads thread ID
+   * @param pri: New threads priority
+   *
+   **/
+  /*====================================================================*/
+
+  /* Allocate memory on stack */
+  size_t sz = 0x10000;
+
+  /* Use uc to create new thread && temp to attach to ready queue*/
+  tcb *uc, *temp;
+  temp = ready;
+  uc = (tcb*)malloc(sizeof(tcb));
+
+  /* Set up details for tcb struct */
+  uc -> thread_priority = pri;
+  uc -> thread_id = thr_id;
+
+  /* Get context from newly created tcb */
+  getcontext(&uc -> thread_context);
+
+  /* Set stack properties for new context */
+  uc -> thread_context.uc_stack.ss_sp = malloc(sz);
+  uc -> thread_context.uc_stack.ss_size = sz;
+  uc -> thread_context.uc_stack.ss_flags = 0;
+
+  /* Set up alternate thread control based on uc's stack properties, func (2 args) = priority, and thread_id  */
+  makecontext(&uc -> thread_context, (void(*)(void)) func, 2, pri, thr_id);
+
+  uc -> next = NULL;
+
+  /* Iterate through running list */
+
+  /* No nodes in ready queue */
+  if (ready == NULL){
+    ready = uc;
+  }
+
+  /* Non-empty ready queue */
+  else {
+    while(temp -> next != NULL){
+      temp = temp -> next;
+    }
+
+    /* Reached end of list */
+    temp -> next = uc;
+  }
+  return 1;
+}
+
+
+/*====================================================================*/
+void t_shutdown(){
+  /**
+   * @brief: Shut down thread library
+   *
+   * Frees all dynamically allocated memory, effectively terminating
+   * the thread library
+   *
+   **/
+  /*====================================================================*/
+  printf("Shutting down mi_thread\n");
+
+  struct tcb *temp = ready;
+
+  /* Allows temp to be free without losing access to new nodes in queue */
+  struct tcb *next;
+
+  /* Iterate through ready list and free all variables */
+  while (temp != NULL){
+    next = temp -> next;
+    free(temp -> thread_context.uc_stack.ss_sp);
+    free(temp);
+    temp = next;
+  }
+
+  /* Set entire queue to node */
+  ready = NULL;
+}
+
+
+/*====================================================================*/
+void t_terminate(){
+  /**
+   * @brief: Terminate calling thread
+   *
+   * Removes tcb from "running" queue and resumes execution of thread
+   * in the head of the "ready" queue via setcontext();
+   *
+   **/
+  /*====================================================================*/
+  tcb *temp = running;
+  tcb *ready_head = ready;
+
+  /* Set ready_head -> next to NULL */
+  if (ready_head != NULL){
+    ready_head -> next = NULL;
+  }
+
+  /* Set TCB of running to the head of the ready queue */
+  running = ready_head;
+
+  /* Iterate through ready list */
+  if(ready != NULL){
+    ready = ready -> next;
+  }
+
+  /* Free stack and tcb */
+  free(temp -> thread_context.uc_stack.ss_sp);
+  free(temp);
+
+  /* Transfer control to context of ready_head */
+  setcontext(&running -> thread_context);
+}
+
+/*====================================================================*/
+void t_yield(){
+  /**
+   * @brief: Calling thread relinquishes CPU and is placed at end of
+   * ready queue
+   *
+   **/
+  /*====================================================================*/
+  tcb *temp = running;
+  running = running -> next;
+
+  /* No threads running outside of main*/
+  if (running == NULL){
+    running = running -> next;
+    return;
+  }
+
+  running = running -> next;
+  /* Else, start running the next thread in running list */
+  temp -> next = running;
+  running -> next = NULL;
+
+  /* Start executing next tcb in ready list */
+  running = ready;
+
+  /* Remove newly started thread from ready list */
+  ready = ready -> next;
+
+  /* Transfer context from currently running tcb to next node of ready queue */
+  swapcontext((&temp -> thread_context), (&running -> thread_context));
+}

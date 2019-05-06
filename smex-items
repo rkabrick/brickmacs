@@ -1,0 +1,26 @@
+
+;; ----- smex-history -----
+(
+ loccur
+ quit-window
+ describe-theme
+ compile
+ linum-relative-global-mode
+ irony-install-server
+ yas-new-snippet
+)
+
+;; ----- smex-data -----
+(
+ (yas-reload-all . 3)
+ (cd . 1)
+ (yas-minor-mode . 1)
+ (yas-global-mode . 1)
+ (yas-new-snippet . 1)
+ (irony-install-server . 4)
+ (linum-relative-global-mode . 1)
+ (compile . 11)
+ (describe-theme . 1)
+ (quit-window . 1)
+ (loccur . 2)
+)
